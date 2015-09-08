@@ -12,6 +12,11 @@ class Board
     puts "-----------"
     puts " #{@board[7]} | #{@board[8]} | #{@board[9]} "
   end
+
+  def refresh_board
+    system("clear")
+    show_board
+  end
 end
 
 

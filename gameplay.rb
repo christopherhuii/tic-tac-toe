@@ -5,7 +5,7 @@ require_relative 'computer.rb'
 class GamePlay
 
   def initialize
-    clear_command_line
+    system("clear")
   end
 
   def play
@@ -13,10 +13,6 @@ class GamePlay
     @user = User.new("x")
     @computer = Computer.new("o")
     start_game
-  end
-
-  def clear_command_line
-    system("clear")
   end
 
   def instructions
@@ -70,41 +66,40 @@ class GamePlay
     puts "Enter tile space number for move"
     @cell_move = gets.chomp.to_i
     if valid_placement
-      @game_board.board[@cell_move] = @user.symbol
+      insert_player_symbol(@user)
     else
       until valid_placement
         puts "Please enter a valid move"
         @cell_move = gets.chomp.to_i
       end
-      @game_board.board[@cell_move] = @user.symbol
+      insert_player_symbol(@user)
     end
     @user.moves << @cell_move
-    refresh_board
+    @game_board.refresh_board
     @dice += 1
   end
 
   def computer_turn
     @cell_move = rand(1..9)
     if valid_placement
-      @game_board.board[@cell_move] = @computer.symbol
+      insert_player_symbol(@computer)
     else
       until valid_placement
         @cell_move = rand(1..9)
       end
-        @game_board.board[@cell_move] = @computer.symbol
+      insert_player_symbol(@computer)
     end
     @computer.moves << @cell_move
-    refresh_board
-    @dice -=1
+    @game_board.refresh_board
+    @dice -= 1
   end
 
   def valid_placement
     @game_board.board[@cell_move] == @cell_move
   end
 
-  def refresh_board
-    clear_command_line
-    @game_board.show_board
+  def insert_player_symbol(player)
+    @game_board.board[@cell_move] = player.symbol
   end
 
   def check_winner(player)
@@ -112,7 +107,7 @@ class GamePlay
 
     if (player.moves.permutation(3).to_a & @winning_combinations).length > 0
       puts "#{player.name} WINS!"
-      @total_moves += 10
+      exit
     end
   end
 end

@@ -17,6 +17,4 @@ class User
       @name = gets.chomp
     end
   end
-
-
 end
